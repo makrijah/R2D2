@@ -1,7 +1,6 @@
 package com.makrijah.geotrack;
 
 import java.util.Calendar;
-import java.util.List;
 import android.os.Bundle;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -19,13 +18,9 @@ import android.widget.Button;
  */
 public class MainActivity extends FragmentActivity {
 
-	//private Location locationNow;
-	//private MainLocator locator;
 	private Button goToLocationListButton;
 	private Button mapButton;
 	private Settings settings;
-	//private LocationsDbHandler db;
-
 
 	/**
 	 * On create
@@ -40,7 +35,6 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.activity_main);
 		setTitle("GeoTrack- main");
 
-		//db = new LocationsDbHandler(getApplicationContext());
 		addButtons();
 	}
 
@@ -70,26 +64,8 @@ public class MainActivity extends FragmentActivity {
 
 			@SuppressWarnings("deprecation")
 			public void onClick(View v) {
-				double lat = 0;
-				double lon = 0;
-				//List<LocationItem> locations = db.getAllLocationItems();
-				//LocationItem item = locations.get(locations.size());
-				//if (locationNow != null){
-				//	lat = locationNow.getLatitude();
-				//	lon = locationNow.getLongitude();
-				//}
-				//if (item != null){
-				//	lat = item.getLatitude();
-				//	lon = item.getLongitude();
-				//}
-				Bundle params = new Bundle();
-				params.putDouble("latitude", lat);
-				params.putDouble("longitude", lon);
-				params.putString("date", Calendar.getInstance().getTime().toLocaleString());
 				Intent maps = new Intent(MainActivity.this, ShowMapActivity.class);
-				//maps.putExtras(params);
 				MainActivity.this.startActivity(maps);
-
 			}
 		});
 
@@ -135,30 +111,6 @@ public class MainActivity extends FragmentActivity {
 		dialog.show();
 	}
 
-	//	/**
-	//	 * Called when the called activity returns a result
-	//	 */
-	//	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-	//		if (requestCode == 1){
-	//			if (resultCode == SplashActivity.RETURN_GPS_OK){
-	//				gpsEnabled = true;
-	//			}
-	//			else{
-	//				gpsEnabled = false;
-	//			}
-	//		}
-	//	}
-	//
-	//	/**
-	//	 * Registers the GPS LocationService BroadcastReceiver 
-	//	 */
-	//	private void registerGPS(){
-	//		if (locator == null) locator = new MainLocator();
-	//		final IntentFilter filter = new IntentFilter();
-	//		filter.addAction(LocationService.INTENT_FILTER_STRING);
-	//		registerReceiver(locator, filter);
-	//	}
-
 	/**
 	 * Called onResume()
 	 */
@@ -174,43 +126,6 @@ public class MainActivity extends FragmentActivity {
 	public void onPause(){
 		super.onPause();
 	}
-
-	//
-	//	/**
-	//	 * Private inner BroadcastReceiver for LocationService
-	//	 * Can access members of outer class
-	//	 * @author makrijah
-	//	 *
-	//	 */
-	//	private class MainLocator extends Locator{
-	//
-	//		/**
-	//		 * Called on receiving a broadcast
-	//		 */
-	//		@Override
-	//		public void onReceive(Context context, Intent intent){
-	//			Bundle msg = intent.getExtras();
-	//			double latitude = 0;
-	//			double longitude = 0;
-	//			if (msg!=null){
-	//				if (msg.getBoolean("gpsEnabled")){
-	//					latitude = msg.getDouble("latitude");
-	//					longitude = msg.getDouble("longitude");
-	//					gpsEnabled = true;
-	//					//latitudeField.setText("Current latitude is "+latitude +".");
-	//					//longitudeField.setText("Current longitude is "+longitude +".");
-	//					//gpsError.setVisibility(View.INVISIBLE);
-	//				}
-	//				else {					
-	//					gpsEnabled = false;
-	//					//gpsError.setVisibility(View.VISIBLE);
-	//					//latitudeField.setText("GPS tracking is currently disabled.");
-	//					//longitudeField.setText("GPS tracking is currently disabled.");
-	//				}
-	//			}
-	//		}
-	//
-	//	}
 
 	/**
 	 * Inner class for storage of configuration settings
