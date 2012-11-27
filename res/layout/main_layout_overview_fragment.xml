@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" 
+    android:layout_gravity="center">
+    
+
+
+    <TextView
+        android:id="@+id/gpsErrorText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="28dp"
+        android:ems="10"/>
+    
+        <TextView
+        android:id="@+id/getGPStext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="46dp"
+        android:layout_marginTop="79dp"
+        android:text="@string/getGPStext" />
+
+    <TextView
+        android:id="@+id/longitudeTextfield"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:text="@string/longitudeText" >
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/latitudeTextfield"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/longitudeTextfield"
+        android:layout_below="@+id/longitudeTextfield"
+        android:layout_marginTop="50dp"
+        android:ems="10"
+        android:text="@string/latitudeText" />
+
+</LinearLayout>

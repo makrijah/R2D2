@@ -1,0 +1,82 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.makrijah.geotrack"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="15" />
+
+    <application
+        android:icon="@drawable/earth"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <uses-library android:name="com.google.android.maps" />
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".LocationListActivity"
+            android:label="@string/title_activity_location_list" >
+
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
+        </activity>
+        <activity
+            android:name=".ShowMapActivity"
+            android:label="@string/title_activity_show_map" >
+
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
+        </activity>
+
+        <service
+            android:name="com.makrijah.geotrack.LocationService"
+            android:enabled="true"
+            android:exported="false"
+            android:icon="@drawable/ic_launcher" >
+            <intent-filter>
+                <action android:name="com.makrijah.geotrack.locationService" />
+            </intent-filter>
+        </service>
+
+        <receiver android:name="com.makrijah.geotrack.Locator" >
+            <intent-filter>
+                <action android:name="test" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".SplashActivity"
+            android:label="@string/title_activity_splash" >
+            <!-- <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter> -->
+        </activity>
+    </application>
+
+</manifest>
