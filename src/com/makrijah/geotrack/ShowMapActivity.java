@@ -24,126 +24,127 @@ import android.widget.Button;
  *
  */
 public class ShowMapActivity extends MapActivity{
-	
+
 	private String loc ="not null";
 	private MapController controller;
 	private double latitude;
 	private double longitude;
-	private String date;
+	private String date = "";
 	private Geocoder gc;
 	private LocationsDbHandler dbHandler;
 	private Locator locator;
 	private List<Overlay> mapOverlays;
 	private LocationItemOverlay itemizedoverlay;
-	
-	
+
+
 	/**
 	 * Extracts fields from the given bundle
 	 * @param bundle Bundle as parameter to activity
 	 */
 	private void unbundle(Bundle bundle){
-        if (bundle != null){
-        	latitude = bundle.getDouble("latitude", 0);
-        	longitude = bundle.getDouble("longitude", 0);
-        	date = bundle.getString("date");
-        }
+		if (bundle != null){
+			latitude = bundle.getDouble("latitude", 0);
+			longitude = bundle.getDouble("longitude", 0);
+			if (bundle.get("date") != null)
+				date = bundle.getString("date");
+		}
 	}
-	
+
 	/**
 	 * Adds geopoints to overlays
 	 */
 	private void setGeopoints(){
-        GeoPoint gp; 
-        OverlayItem oi;
-        
-        for (LocationItem item: dbHandler.getAllLocationItems()){
-        	gp = new GeoPoint((int) (item.getLatitude() * 1E6),(int) (item.getLongitude() * 1E6));
-        	ArrayList<Address> locs;
-        	String s ="";
+		GeoPoint gp; 
+		OverlayItem oi;
+
+		for (LocationItem item: dbHandler.getAllLocationItems()){
+			gp = new GeoPoint((int) (item.getLatitude() * 1E6),(int) (item.getLongitude() * 1E6));
+			ArrayList<Address> locs;
+			String s ="";
 			try {
 				locs = (ArrayList<Address>) gc.getFromLocation(latitude, longitude, 1);
 				s = locs.get(0).getCountryName() + ", " + locs.get(0).getAddressLine(0);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
-        	oi = new OverlayItem(gp, s, item.getDate());
-        	itemizedoverlay.addOverlay(oi);
-        	mapOverlays.add(itemizedoverlay);
-        }
+
+			oi = new OverlayItem(gp, s, item.getDate());
+			itemizedoverlay.addOverlay(oi);
+			mapOverlays.add(itemizedoverlay);
+		}
 	}
-	
+
 	/**
 	 * on create
 	 */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState); 
-        setTitle("GeoTrack- map view");
-        unbundle(getIntent().getExtras());
-        
-        gc = new Geocoder(this);
-        try {
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState); 
+		setTitle("GeoTrack- map view");
+		unbundle(getIntent().getExtras());
+
+		gc = new Geocoder(this);
+		try {
 			ArrayList<Address> locations = (ArrayList<Address>) gc.getFromLocation(latitude, longitude, 1);
 			loc = locations.get(0).getCountryName() + ", " + locations.get(0).getAddressLine(0);
-			
-		} catch (IOException e) {			
+
+		}
+		catch(IndexOutOfBoundsException i){
+			loc = "No address found...";
+		}
+		catch(IllegalArgumentException e){
+			loc = "Unknown location";
+		}		
+		catch (IOException e) {			
 			loc = "IOException";			
 		}
-        catch(IllegalArgumentException e){
-        	loc = "Unknown location";
-        }
-        catch(IndexOutOfBoundsException i){
-        	loc = "No address found...";
-        }
-        
-        dbHandler = new LocationsDbHandler(getApplicationContext());
-        
-        setContentView(R.layout.activity_show_map);
-        final Button back = (Button) findViewById(R.id.goBackFromMapButton);
-        back.setOnClickListener(new View.OnClickListener() {			
+		dbHandler = new LocationsDbHandler(getApplicationContext());
+
+		setContentView(R.layout.activity_show_map);
+		final Button back = (Button) findViewById(R.id.goBackFromMapButton);
+		back.setOnClickListener(new View.OnClickListener() {			
 			public void onClick(View v) {
 				ShowMapActivity.this.finish();				
 			}
 		});
-        
-        MapView mapView = (MapView) findViewById(R.id.mapView);
- 
-        mapView.setBuiltInZoomControls(true);
-        
-        controller = mapView.getController();
 
-        Drawable drawable = this.getResources().getDrawable(R.drawable.androidmarker);
-        mapOverlays = mapView.getOverlays();
-        itemizedoverlay = new LocationItemOverlay(drawable, this);
-        setGeopoints();
-        
-        Drawable d = this.getResources().getDrawable(R.drawable.location);
-        LocationItemOverlay lio = new LocationItemOverlay(d, this);
-        
-        GeoPoint point = new GeoPoint((int) (latitude * 1E6),(int) (longitude * 1E6));
-        
-        OverlayItem overlayitem = new OverlayItem(point, loc, date);
-        controller.animateTo(point);
+		MapView mapView = (MapView) findViewById(R.id.mapView);
 
-        lio.addOverlay(overlayitem);
-        mapOverlays.add(itemizedoverlay);
-        mapOverlays.add(lio);        
-      
-    }
+		mapView.setBuiltInZoomControls(true);
 
-    /**
-     * Default menu
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.activity_show_map, menu);
-        return true;
-    }
+		controller = mapView.getController();
 
-    /**
-     * No route is displayed
-     */
+		Drawable drawable = this.getResources().getDrawable(R.drawable.androidmarker);
+		mapOverlays = mapView.getOverlays();
+		itemizedoverlay = new LocationItemOverlay(drawable, this);
+		setGeopoints();
+
+		Drawable d = this.getResources().getDrawable(R.drawable.location);
+		LocationItemOverlay lio = new LocationItemOverlay(d, this);
+
+		GeoPoint point = new GeoPoint((int) (latitude * 1E6),(int) (longitude * 1E6));
+
+		OverlayItem overlayitem = new OverlayItem(point, loc, date);
+		controller.animateTo(point);
+
+		lio.addOverlay(overlayitem);
+		mapOverlays.add(itemizedoverlay);
+		mapOverlays.add(lio);        
+
+	}
+
+	/**
+	 * Default menu
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		//getMenuInflater().inflate(R.menu.activity_show_map, menu);
+		return true;
+	}
+
+	/**
+	 * No route is displayed
+	 */
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
@@ -159,7 +160,7 @@ public class ShowMapActivity extends MapActivity{
 		registerReceiver(locator, filter);
 		super.onResume();
 	}
-	
+
 	/**
 	 * Called when the activity is paused
 	 */

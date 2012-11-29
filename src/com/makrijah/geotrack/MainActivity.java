@@ -1,6 +1,5 @@
 package com.makrijah.geotrack;
 
-import java.util.Calendar;
 import android.os.Bundle;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,7 +15,7 @@ import android.widget.Button;
  * @author makrijah
  *
  */
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity{
 
 	private Button goToLocationListButton;
 	private Button mapButton;
@@ -32,6 +31,7 @@ public class MainActivity extends FragmentActivity {
 		settings = (Settings) getLastCustomNonConfigurationInstance();
 		if (settings==null) settings = new Settings();
 		settings.started = true;
+	
 		setContentView(R.layout.activity_main);
 		setTitle("GeoTrack- main");
 
@@ -99,7 +99,7 @@ public class MainActivity extends FragmentActivity {
 	 */
 	private void showAboutDialog(){
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.about_dialog_title);
+		builder.setTitle(R.string.about_dialog_title);		
 		builder.setMessage(R.string.about_dialog_text)
 		.setCancelable(true)
 		.setNeutralButton("Ok", new DialogInterface.OnClickListener() {			

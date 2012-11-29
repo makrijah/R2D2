@@ -5,10 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SlidingDrawer;
 import android.widget.TextView;
 
 public class OverviewFragment extends Fragment{
@@ -20,20 +22,31 @@ public class OverviewFragment extends Fragment{
 	private TextView gpsError;
 	private MainLocator locator;
 	private View view;
+	private Handler timeHandler;
+	private Runnable time;
+	
 
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){		
 		if (!gpsEnabled) startSplash();
 		view = inflater.inflate(R.layout.main_layout_overview_fragment, container, false);
-
 		gpsError = (TextView) view.findViewById(R.id.gpsErrorText);
-		gpsError.setText("No GPS signal received (GPS disabled?)");
+		gpsError.setText(getString(R.string.gpsNotOkText));
 		latitudeField = (TextView) view.findViewById(R.id.latitudeTextfield);
 		longitudeField = (TextView) view.findViewById(R.id.longitudeTextfield);
 		GPSText = (TextView) view.findViewById(R.id.getGPStext);
-		GPSText.setText(Calendar.getInstance().getTime().toLocaleString());
-
+		
+		timeHandler = new Handler();
+				
+		time = new Runnable() {			
+			public void run() {
+				GPSText.setText(Calendar.getInstance().getTime().toLocaleString());
+				timeHandler.postDelayed(this,1000);				
+			}
+		};
+		
+		timeHandler.postDelayed(time, 1000);		
 		return view;
 	}
 
@@ -54,6 +67,7 @@ public class OverviewFragment extends Fragment{
 		final IntentFilter filter = new IntentFilter();
 		filter.addAction(LocationService.INTENT_FILTER_STRING);
 		getActivity().registerReceiver(locator, filter);
+		
 		super.onResume();
 	}
 
@@ -76,6 +90,7 @@ public class OverviewFragment extends Fragment{
 
 				latitudeField.setText("Current latitude is "+data.getDoubleExtra("latitude", 0) +".");
 				longitudeField.setText("Current longitude is "+data.getDoubleExtra("longitude", 0) +".");
+				gpsError.setText(getString(R.string.gpsOkText));
 			}
 			else{
 				gpsEnabled = false;
@@ -121,5 +136,5 @@ public class OverviewFragment extends Fragment{
 		}
 
 	}
-
+	
 }
