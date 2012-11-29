@@ -102,9 +102,7 @@ public class ShowMapActivity extends MapActivity{
 				loc = "No address found...";
 			}
 		}
-		/*
-		 * 
-		 */
+
 		dbHandler = new LocationsDbHandler(getApplicationContext());
 
 		setContentView(R.layout.activity_show_map);

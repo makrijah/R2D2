@@ -29,14 +29,17 @@ public class OverviewFragment extends Fragment{
 	private View view;
 	private Handler timeHandler;
 	private Runnable time;
+	private boolean splashTried = false;
 	
 	/**
 	 * onCreateView
 	 */
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){		
-		if (!gpsEnabled) startSplash();
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){	
+		if (savedInstance != null) splashTried = savedInstance.getBoolean("tried");
+		if (!gpsEnabled && !splashTried) startSplash();
 		view = inflater.inflate(R.layout.main_layout_overview_fragment, container, false);
+		
 		gpsError = (TextView) view.findViewById(R.id.gpsErrorText);
 		gpsError.setText(getString(R.string.gpsNotOkText));
 		latitudeField = (TextView) view.findViewById(R.id.latitudeTextfield);
@@ -55,9 +58,20 @@ public class OverviewFragment extends Fragment{
 	}
 
 	/**
+	 * Keeps track if the splashScreen has already been invoked
+	 * and whether GPS signal has been received.
+	 */
+	@Override
+	public void onSaveInstanceState(Bundle bundle){
+		super.onSaveInstanceState(bundle);
+		bundle.putBoolean("tried", true);
+	}
+	
+	/**
 	 * Starts the SplashScreen (for result)
 	 */
 	private void startSplash(){
+		splashTried = true;
 		Intent intent = new Intent(getActivity(), SplashActivity.class);
 		startActivityForResult(intent, 1);
 	}

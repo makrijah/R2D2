@@ -29,7 +29,6 @@ public class ButtonsFragment extends Fragment{
 				
 		return view;
 	}
-	
 
 	/**
 	 * Method for adding (the two) buttons

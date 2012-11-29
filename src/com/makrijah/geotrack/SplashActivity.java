@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -45,44 +47,30 @@ public class SplashActivity extends FragmentActivity {
 		final IntentFilter filter = new IntentFilter();
 		filter.addAction("com.makrijah.geotrack.positions");
 		registerReceiver(locator, filter);
-		
-		timeHandler = new Handler();				
-		time = new Runnable() {			
-			public void run() {
-				popUpNoGPS();
-			}
-		};		
-		timeHandler.postDelayed(time, maxTryingTime);		
+
 	}
 
 	/**
 	 * Pops up a message, that no GPS signal can be received.
 	 */
 	private void popUpNoGPS(){
+		//Temporarily disable orientation change. Otherwise the activity may stay waiting for GPS
+		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		} else setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.gpsAlert);		
 		builder.setMessage(R.string.gpsNoSignal)
-		.setCancelable(true)
+		.setCancelable(false)
 		.setNeutralButton("Quit", new DialogInterface.OnClickListener() {			
 			public void onClick(DialogInterface dialog, int which) {
-				quit();
-				dialog.cancel();
-				
+				gpsNotOK();
 			}
 		});
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}
-	
-	/**
-	 * Quits this activity. Called when GPS signal is not received although 
-	 * GPS is enabled in the system. 
-	 */
-	private void quit(){
-		unregisterReceiver(locator);
-		this.finish();
-	}
-	
+
 	/**
 	 * Keep the configuration
 	 */
@@ -90,24 +78,31 @@ public class SplashActivity extends FragmentActivity {
 	public Object onRetainCustomNonConfigurationInstance(){
 		return settings;
 	}
-	
+
 	/**
 	 * Starts GPS service (LocationService)
 	 */
 	private void startGPS(){
 		startService(new Intent(getApplicationContext(), LocationService.class));
 		settings.started = true;
+		timeHandler = new Handler();				
+		time = new Runnable() {			
+			public void run() {
+				popUpNoGPS();
+			}
+		};		
+		timeHandler.postDelayed(time, maxTryingTime);
 	}
-	
+
 	/**
 	 * Set the Splashscreen to fullscreen
 	 */
 	private void setFullscreen(){		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	}
-	
+
 	/**
 	 * Disables menu
 	 */
@@ -138,13 +133,13 @@ public class SplashActivity extends FragmentActivity {
 		setResult(RETURN_GPS_NOT_OK, returnIntent);
 		finish();
 	}
-	
+
 	/**
 	 * Disables back button
 	 */
 	@Override
 	public void onBackPressed(){
-		
+
 	}
 
 
@@ -178,7 +173,7 @@ public class SplashActivity extends FragmentActivity {
 		}
 
 	}
-	
+
 	/**
 	 * Inner class for saving last configuration
 	 * @author makrijah

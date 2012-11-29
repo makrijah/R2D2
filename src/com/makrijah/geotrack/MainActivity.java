@@ -28,7 +28,6 @@ public class MainActivity extends FragmentActivity{
 		settings = (Settings) getLastCustomNonConfigurationInstance();
 		if (settings==null) settings = new Settings();
 		settings.started = true;
-
 		setContentView(R.layout.activity_main);
 		setTitle("GeoTrack- main");
 	}
@@ -40,7 +39,7 @@ public class MainActivity extends FragmentActivity{
 	public Object onRetainCustomNonConfigurationInstance(){
 		return settings;
 	}
-
+	
 	/**
 	 * Inflates the menu
 	 * @param menu The menu to be inflated
