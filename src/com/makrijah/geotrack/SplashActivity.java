@@ -1,9 +1,12 @@
 package com.makrijah.geotrack;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.Window;
@@ -22,6 +25,9 @@ public class SplashActivity extends FragmentActivity {
 	private Settings settings;
 	public static final int RETURN_GPS_OK = 1;
 	public static final int RETURN_GPS_NOT_OK = 0;
+	private Handler timeHandler;
+	private Runnable time;
+	private final long maxTryingTime = 12000; 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,14 @@ public class SplashActivity extends FragmentActivity {
 		if (settings==null) settings = new Settings();
 		if (!settings.started) startGPS(); 
 
+		timeHandler = new Handler();				
+		time = new Runnable() {			
+			public void run() {
+				popUpNoGPS();
+			}
+		};		
+		timeHandler.postDelayed(time, maxTryingTime);
+		
 		//Register broadcastreceiver
 		if (locator == null) locator = new SplashLocator();
 		final IntentFilter filter = new IntentFilter();
@@ -44,6 +58,29 @@ public class SplashActivity extends FragmentActivity {
 
 	}
 
+	/**
+	 * Pops up a message, that no GPS signal can be received.
+	 */
+	private void popUpNoGPS(){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.gpsAlert);		
+		builder.setMessage(R.string.gpsNoSignal)
+		.setCancelable(true)
+		.setNeutralButton("Quit", new DialogInterface.OnClickListener() {			
+			public void onClick(DialogInterface dialog, int which) {
+				quit();
+				dialog.cancel();
+				
+			}
+		});
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+	
+	private void quit(){
+		this.finish();
+	}
+	
 	/**
 	 * Keep the configuration
 	 */
