@@ -27,7 +27,7 @@ public class SplashActivity extends FragmentActivity {
 	public static final int RETURN_GPS_NOT_OK = 0;
 	private Handler timeHandler;
 	private Runnable time;
-	private final long maxTryingTime = 12000; 
+	private final long maxTryingTime = 90000; 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
