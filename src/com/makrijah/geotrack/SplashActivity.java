@@ -40,22 +40,19 @@ public class SplashActivity extends FragmentActivity {
 		if (settings==null) settings = new Settings();
 		if (!settings.started) startGPS(); 
 
-		timeHandler = new Handler();				
-		time = new Runnable() {			
-			public void run() {
-				popUpNoGPS();
-			}
-		};		
-		timeHandler.postDelayed(time, maxTryingTime);
-		
 		//Register broadcastreceiver
 		if (locator == null) locator = new SplashLocator();
 		final IntentFilter filter = new IntentFilter();
 		filter.addAction("com.makrijah.geotrack.positions");
 		registerReceiver(locator, filter);
 		
-
-
+		timeHandler = new Handler();				
+		time = new Runnable() {			
+			public void run() {
+				popUpNoGPS();
+			}
+		};		
+		timeHandler.postDelayed(time, maxTryingTime);		
 	}
 
 	/**
@@ -77,7 +74,12 @@ public class SplashActivity extends FragmentActivity {
 		dialog.show();
 	}
 	
+	/**
+	 * Quits this activity. Called when GPS signal is not received although 
+	 * GPS is enabled in the system. 
+	 */
 	private void quit(){
+		unregisterReceiver(locator);
 		this.finish();
 	}
 	
@@ -165,6 +167,7 @@ public class SplashActivity extends FragmentActivity {
 					if (msg.getBoolean("gotGPS")){
 						latitude = msg.getDouble("latitude");
 						longitude = msg.getDouble("longitude");
+						timeHandler.removeCallbacks(time);
 						gpsOK(latitude, longitude);
 					}
 				}
