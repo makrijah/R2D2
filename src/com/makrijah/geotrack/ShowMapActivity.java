@@ -36,6 +36,7 @@ public class ShowMapActivity extends MapActivity{
 	private Locator locator;
 	private List<Overlay> mapOverlays;
 	private LocationItemOverlay itemizedoverlay;
+	private boolean zoomToIntentPoint = false;
 
 
 	/**
@@ -44,10 +45,13 @@ public class ShowMapActivity extends MapActivity{
 	 */
 	private void unbundle(Bundle bundle){
 		if (bundle != null){
-			latitude = bundle.getDouble("latitude", 0);
-			longitude = bundle.getDouble("longitude", 0);
-			if (bundle.get("date") != null)
-				date = bundle.getString("date");
+			if (bundle.getBoolean("located")){
+				zoomToIntentPoint = true;
+				latitude = bundle.getDouble("latitude", 0);
+				longitude = bundle.getDouble("longitude", 0);
+				if (bundle.get("date") != null)
+					date = bundle.getString("date");
+			}
 		}
 	}
 
@@ -84,53 +88,51 @@ public class ShowMapActivity extends MapActivity{
 		setTitle("GeoTrack- map view");
 		unbundle(getIntent().getExtras());
 
-		gc = new Geocoder(this);
-		try {
-			ArrayList<Address> locations = (ArrayList<Address>) gc.getFromLocation(latitude, longitude, 1);
-			loc = locations.get(0).getCountryName() + ", " + locations.get(0).getAddressLine(0);
-
-		}
-		catch(IndexOutOfBoundsException i){
-			loc = "No address found...";
-		}
-		catch(IllegalArgumentException e){
-			loc = "Unknown location";
-		}		
-		catch (IOException e) {			
-			loc = "IOException";			
-		}
 		dbHandler = new LocationsDbHandler(getApplicationContext());
-
 		setContentView(R.layout.activity_show_map);
+		gc = new Geocoder(this);
+		MapView mapView = (MapView) findViewById(R.id.mapView);
+		mapView.setBuiltInZoomControls(true);
+
+		controller = mapView.getController();
+		mapOverlays = mapView.getOverlays();
+
+		if(zoomToIntentPoint){
+			try {
+				ArrayList<Address> locations = (ArrayList<Address>) gc.getFromLocation(latitude, longitude, 1);
+				loc = locations.get(0).getCountryName() + ", " + locations.get(0).getAddressLine(0);
+				Drawable d = this.getResources().getDrawable(R.drawable.location);
+				LocationItemOverlay lio = new LocationItemOverlay(d, this);
+				GeoPoint point = new GeoPoint((int) (latitude * 1E6),(int) (longitude * 1E6));
+				OverlayItem overlayitem = new OverlayItem(point, loc, date);
+				controller.animateTo(point);
+
+				lio.addOverlay(overlayitem);
+				mapOverlays.add(lio);  
+
+			}
+			catch(IndexOutOfBoundsException i){
+				loc = "No address found...";
+			}
+			catch(IllegalArgumentException e){
+				loc = "Unknown location";
+			}		
+			catch (IOException e) {			
+				loc = "IOException";			
+			}
+		}
+
 		final Button back = (Button) findViewById(R.id.goBackFromMapButton);
 		back.setOnClickListener(new View.OnClickListener() {			
 			public void onClick(View v) {
 				ShowMapActivity.this.finish();				
 			}
-		});
-
-		MapView mapView = (MapView) findViewById(R.id.mapView);
-
-		mapView.setBuiltInZoomControls(true);
-
-		controller = mapView.getController();
-
+		});		
 		Drawable drawable = this.getResources().getDrawable(R.drawable.androidmarker);
-		mapOverlays = mapView.getOverlays();
+
 		itemizedoverlay = new LocationItemOverlay(drawable, this);
 		setGeopoints();
-
-		Drawable d = this.getResources().getDrawable(R.drawable.location);
-		LocationItemOverlay lio = new LocationItemOverlay(d, this);
-
-		GeoPoint point = new GeoPoint((int) (latitude * 1E6),(int) (longitude * 1E6));
-
-		OverlayItem overlayitem = new OverlayItem(point, loc, date);
-		controller.animateTo(point);
-
-		lio.addOverlay(overlayitem);
 		mapOverlays.add(itemizedoverlay);
-		mapOverlays.add(lio);        
 
 	}
 

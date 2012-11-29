@@ -49,7 +49,9 @@ public class ButtonsFragment extends Fragment{
 
 			
 			public void onClick(View v) {
-				Intent maps = new Intent(activity.getApplicationContext(), ShowMapActivity.class);
+				//Intent maps = new Intent(activity.getApplicationContext(), ShowMapActivity.class);
+				MapIntent maps = new MapIntent(activity.getApplicationContext(), ShowMapActivity.class);
+				maps.setLocation(false, 0, 0, "");
 				activity.startActivity(maps);
 			}
 		});

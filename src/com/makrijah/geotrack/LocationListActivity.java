@@ -6,7 +6,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.app.ListActivity;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.view.Menu;
 import android.view.View;
@@ -78,13 +77,8 @@ public class LocationListActivity extends ListActivity{
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 
 		LocationItem li = list.get(position);
-		
-		Intent maps = new Intent(LocationListActivity.this, ShowMapActivity.class);
-		Bundle params = new Bundle();
-		params.putDouble("latitude", li.getLatitude());
-		params.putDouble("longitude", li.getLongitude());
-		params.putString("date", li.getDate());
-		maps.putExtras(params);
+		MapIntent maps = new MapIntent(LocationListActivity.this, ShowMapActivity.class);
+		maps.setLocation(true, li.getLatitude(), li.getLongitude(), li.getDate());
 		startActivity(maps);
 		
 	}
