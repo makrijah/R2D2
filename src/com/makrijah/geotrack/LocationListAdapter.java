@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 /**
  * Custom list adapter
- * @author makrijah
- *
+ * @author Markus-Kristian Ahvenus
+ * @version Nov 29, 2012
  */
 public class LocationListAdapter extends ArrayAdapter<String> {
 	private final Context context;
@@ -21,15 +21,13 @@ public class LocationListAdapter extends ArrayAdapter<String> {
 	/**
 	 * Constructor
 	 * @param context context
-	 * @param values String[]
+	 * @param values String-array
 	 */
 	public LocationListAdapter(Context context, String[] values) {	  
 		super(context, R.layout.listitemlayout, values);
 		this.context = context;
 		this.values = values;
 	}
-
-
 
 	/**
 	 * Gets the requested view
@@ -49,6 +47,5 @@ public class LocationListAdapter extends ArrayAdapter<String> {
 		imageView.setImageResource(R.drawable.earth);
 		return rowView;
 	}
-	
-	
+
 } 

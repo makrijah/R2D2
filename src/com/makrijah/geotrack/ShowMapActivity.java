@@ -19,9 +19,10 @@ import android.view.View;
 import android.widget.Button;
 
 /**
- * The map activity
- * @author makrijah
- *
+ * The map activity. The activity shows (all) previously accessed
+ * GeoPoints from the database.
+ * @author Markus-Kristian Ahvenus
+ * @version Nov 29, 2012
  */
 public class ShowMapActivity extends MapActivity{
 
@@ -134,11 +135,10 @@ public class ShowMapActivity extends MapActivity{
 	}
 
 	/**
-	 * Default menu
+	 * Default menu. No menu available for this activity.
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		//getMenuInflater().inflate(R.menu.activity_show_map, menu);
 		return true;
 	}
 

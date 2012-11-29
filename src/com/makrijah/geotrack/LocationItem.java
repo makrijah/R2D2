@@ -3,9 +3,10 @@ package com.makrijah.geotrack;
 import android.location.Location;
 
 /**
- * Class that holds information of accessed locations 
- * @author makrijah
- *
+ * Class that holds information of accessed locations
+ * Latitude, longitude and date.
+ * @author Markus-Kristian Ahvenus
+ * @version Nov 29, 2012
  */
 public class LocationItem {
  
@@ -17,9 +18,7 @@ public class LocationItem {
     /**
      * Default constructor
      */
-    public LocationItem(){
-    	
-    }
+    public LocationItem(){}
     
     /**
      * Constructor

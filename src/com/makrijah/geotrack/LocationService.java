@@ -12,9 +12,10 @@ import android.os.Bundle;
 import android.os.IBinder;
 
 /**
- * The service that provides the application with GPS location data
- * @author makrijah
- *
+ * The service that provides the application with GPS location data.
+ * The service is also adding new LocationItem-objects to the database.
+ * @author Markus-Kristian Ahvenus
+ * @version Nov 29, 2012
  */
 public class LocationService extends Service implements LocationListener {
 
@@ -26,7 +27,9 @@ public class LocationService extends Service implements LocationListener {
     public static final String PROVIDERSTRING = LocationManager.GPS_PROVIDER;
     public static final String INTENT_FILTER_STRING = "com.makrijah.geotrack.positions";
 
-    
+    /**
+     * Called when the service is started.
+     */
     @Override
     public void onStart(Intent intent, int startid){
     	locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -54,6 +57,7 @@ public class LocationService extends Service implements LocationListener {
         final Intent msg = new Intent(INTENT_FILTER_STRING);
         Bundle b = new Bundle();
         
+        //TODO: Change date-format
         dbHandler.addLocationItem(new LocationItem(location.getLatitude(), 
         		location.getLongitude(), Calendar.getInstance().getTime().toLocaleString()));
         
@@ -90,8 +94,14 @@ public class LocationService extends Service implements LocationListener {
         sendBroadcast(msg);
     }
 
+    /**
+     * Called when the status changes
+     */
     public void onStatusChanged(final String arg0, final int arg1, final Bundle arg2) {}
 
+    /**
+     * Default onBind()
+     */
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;

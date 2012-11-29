@@ -10,9 +10,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SlidingDrawer;
 import android.widget.TextView;
 
+/**
+ * Fragment that keeps additional functionality
+ * and information.
+ * @author Markus-Kristian Ahvenus
+ * @version Nov 29, 2012
+ */
 public class OverviewFragment extends Fragment{
 
 	private TextView latitudeField;
@@ -25,8 +30,9 @@ public class OverviewFragment extends Fragment{
 	private Handler timeHandler;
 	private Runnable time;
 	
-
-
+	/**
+	 * onCreateView
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){		
 		if (!gpsEnabled) startSplash();
@@ -37,15 +43,13 @@ public class OverviewFragment extends Fragment{
 		longitudeField = (TextView) view.findViewById(R.id.longitudeTextfield);
 		GPSText = (TextView) view.findViewById(R.id.getGPStext);
 		
-		timeHandler = new Handler();
-				
+		timeHandler = new Handler();				
 		time = new Runnable() {			
 			public void run() {
 				GPSText.setText(Calendar.getInstance().getTime().toLocaleString());
 				timeHandler.postDelayed(this,1000);				
 			}
-		};
-		
+		};		
 		timeHandler.postDelayed(time, 1000);		
 		return view;
 	}
@@ -87,7 +91,6 @@ public class OverviewFragment extends Fragment{
 		if (requestCode == 1){
 			if (resultCode == SplashActivity.RETURN_GPS_OK){
 				gpsEnabled = true;
-
 				latitudeField.setText("Current latitude is "+data.getDoubleExtra("latitude", 0) +".");
 				longitudeField.setText("Current longitude is "+data.getDoubleExtra("longitude", 0) +".");
 				gpsError.setText(getString(R.string.gpsOkText));
@@ -100,9 +103,8 @@ public class OverviewFragment extends Fragment{
 
 	/**
 	 * Private inner BroadcastReceiver for LocationService
-	 * Can access members of outer class
-	 * @author makrijah
-	 *
+	 * @author Markus-Kristian Ahvenus
+	 * @version Nov 29, 2012
 	 */
 	private class MainLocator extends Locator{
 

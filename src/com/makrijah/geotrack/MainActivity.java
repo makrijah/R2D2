@@ -7,22 +7,19 @@ import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 /**
- * The main activity for Geotrack-project
- * @author makrijah
- *
+ * The main activity for Geotrack-project.
+ * It contains the two fragments and the "menu"
+ * @author Markus-Kristian Ahvenus
+ * @version Nov 29, 2012
  */
 public class MainActivity extends FragmentActivity{
 
-	private Button goToLocationListButton;
-	private Button mapButton;
 	private Settings settings;
 
 	/**
-	 * On create
+	 * On create (override)
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -31,15 +28,13 @@ public class MainActivity extends FragmentActivity{
 		settings = (Settings) getLastCustomNonConfigurationInstance();
 		if (settings==null) settings = new Settings();
 		settings.started = true;
-	
+
 		setContentView(R.layout.activity_main);
 		setTitle("GeoTrack- main");
-
-		addButtons();
 	}
 
 	/**
-	 * override
+	 * Keeps the configuration
 	 */
 	@Override
 	public Object onRetainCustomNonConfigurationInstance(){
@@ -47,30 +42,9 @@ public class MainActivity extends FragmentActivity{
 	}
 
 	/**
-	 * Method for adding buttons
+	 * Inflates the menu
+	 * @param menu The menu to be inflated
 	 */
-	private void addButtons(){
-
-		goToLocationListButton = (Button) findViewById(R.id.goToLocationListButton);
-		goToLocationListButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				Intent locationListIntent = new Intent(MainActivity.this, LocationListActivity.class);
-				MainActivity.this.startActivity(locationListIntent);
-			}
-		});
-
-		mapButton = (Button) findViewById(R.id.goToMapButton);
-		mapButton.setOnClickListener(new View.OnClickListener() {
-
-			@SuppressWarnings("deprecation")
-			public void onClick(View v) {
-				Intent maps = new Intent(MainActivity.this, ShowMapActivity.class);
-				MainActivity.this.startActivity(maps);
-			}
-		});
-
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.layout.main_menu, menu);
@@ -79,6 +53,7 @@ public class MainActivity extends FragmentActivity{
 
 	/**
 	 * Menu items
+	 * @param item Which item is selected
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item){
@@ -95,7 +70,7 @@ public class MainActivity extends FragmentActivity{
 	}
 
 	/**
-	 * Dialog for "about"
+	 * Dialog for "about". Shows basic information about the application.
 	 */
 	private void showAboutDialog(){
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -129,8 +104,8 @@ public class MainActivity extends FragmentActivity{
 
 	/**
 	 * Inner class for storage of configuration settings
-	 * @author makrijah
-	 *
+	 * @author Markus-Kristian Ahvenus
+	 * @version Nov 29, 2012
 	 */
 	private class Settings{
 		public boolean started = false;

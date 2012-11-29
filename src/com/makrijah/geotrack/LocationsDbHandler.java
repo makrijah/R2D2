@@ -11,9 +11,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * A database handler
- * @author makrijah
- *
+ * A DatabaseHandler responsible for managing Location items.
+ * @author Markus-Kristian Ahvenus
+ * @version Nov 29, 2012
  */
 public class LocationsDbHandler extends SQLiteOpenHelper {
 
@@ -77,7 +77,7 @@ public class LocationsDbHandler extends SQLiteOpenHelper {
 
 		Cursor cursor = db.query(TABLE_LOCATIONS, new String[] { KEY_ID,
 				KEY_LATITUDE, KEY_LONGITUDE,  KEY_DATE }, KEY_ID + "=?",
-						new String[] { String.valueOf(id) }, null, null, null, null);
+				new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor != null)
 			cursor.moveToFirst();
 
@@ -116,16 +116,6 @@ public class LocationsDbHandler extends SQLiteOpenHelper {
 		}
 		return locations;
 	}
-
-
-	
-//	public void deleteLocationItem(LocationItem item) {
-//		SQLiteDatabase db = this.getWritableDatabase();
-//		db.delete(TABLE_LOCATIONS, KEY_ID + " = ?",
-//				new String[] { String.valueOf(item.getID()) });
-//		db.close();
-//	}
-
 
 	/**
 	 * Get the overall number of entries in the database

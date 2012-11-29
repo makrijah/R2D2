@@ -12,8 +12,8 @@ import com.google.android.maps.OverlayItem;
 
 /**
  * Custom class for Overlay
- * @author makrijah
- *
+ * @author Markus-Kristian Ahvenus
+ * @version Nov 29, 2012
  */
 @SuppressWarnings("rawtypes")
 public class LocationItemOverlay extends ItemizedOverlay{
@@ -40,7 +40,7 @@ public class LocationItemOverlay extends ItemizedOverlay{
 		}
 	
 	/**
-	 * Adds an overlay
+	 * Adds an overlay to the list.
 	 * @param overlay overlay to be added
 	 */
 	public void addOverlay(OverlayItem overlay) {
@@ -48,16 +48,26 @@ public class LocationItemOverlay extends ItemizedOverlay{
 	    populate();
 	}
 	
+	/**
+	 * Creates an OverlayItem
+	 */
 	@Override
 	protected OverlayItem createItem(int arg0) {
 		return mOverlays.get(arg0);
 	}
 
+	/**
+	 * Returns the size of the Overlay-list
+	 */
 	@Override
 	public int size() {
 		return mOverlays.size();
 	}
 	
+	/**
+	 * Called, when an item is tapped
+	 * @param index Which item was tapped
+	 */
 	@Override
 	protected boolean onTap(int index) {
 	  OverlayItem item = mOverlays.get(index);

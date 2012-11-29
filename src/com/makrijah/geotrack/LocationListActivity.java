@@ -2,16 +2,10 @@ package com.makrijah.geotrack;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.view.Menu;
@@ -20,8 +14,8 @@ import android.widget.ListView;
 
 /**
  * Class for a custom list activity
- * @author makrijah
- *
+ * @author Markus-Kristian Ahvenus
+ * @version Nov 29, 2012
  */
 public class LocationListActivity extends ListActivity{
 
@@ -29,6 +23,7 @@ public class LocationListActivity extends ListActivity{
 	private Geocoder gc;
 	private LocationsDbHandler db;
 	private Locator locator;
+	private String[] items;
 	
 	/**
 	 * On create
@@ -39,12 +34,22 @@ public class LocationListActivity extends ListActivity{
 		setTitle("GeoTrack- location list");
 		db = new LocationsDbHandler(getApplicationContext());
 		list = (ArrayList<LocationItem>) db.getAllLocationItems();
-		String[] items = new String[db.getLocationItemsCount()];
-		int i = 0;
+		
 		gc = new Geocoder(this);
-		String s ="Location...";
+		getStringsForItems();	
 
+		LocationListAdapter adapter = new LocationListAdapter(this, items);
+		setListAdapter(adapter);
+	}
+	
+	/**
+	 * Gets a String-array for the LocationItems of the list
+	 */
+	private void getStringsForItems(){
+		items = new String[db.getLocationItemsCount()];
 		Address a;
+		String s;
+		int i = 0;
 		for (LocationItem item: list){
 			try{
 				a = gc.getFromLocation(item.getLatitude(), item.getLongitude(), 1).get(0);
@@ -65,9 +70,6 @@ public class LocationListActivity extends ListActivity{
 			items[i] = s +"|"+item.getDate();
 			i++;
 		}
-
-		LocationListAdapter adapter = new LocationListAdapter(this, items);
-		setListAdapter(adapter);
 	}
 
 	/**
@@ -88,11 +90,10 @@ public class LocationListActivity extends ListActivity{
 	}
 
 	/**
-	 * Default menu
+	 * Default menu. No menu available for this activity-
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		//getMenuInflater().inflate(R.menu.activity_location_list, menu);
 		return true;
 	}
 
