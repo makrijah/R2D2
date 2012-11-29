@@ -1,7 +1,5 @@
 package com.makrijah.geotrack;
 
-//import com.makrijah.geotrack.MainActivity.MainLocator;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -93,7 +91,7 @@ public class SplashActivity extends FragmentActivity {
 		finish();
 	}
 
-	/*
+	/**
 	 * Returns failure to calling activity
 	 */
 	private void gpsNotOK(){
