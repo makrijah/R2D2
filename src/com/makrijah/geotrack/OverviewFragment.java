@@ -22,40 +22,56 @@ public class OverviewFragment extends Fragment{
 
 	private TextView latitudeField;
 	private TextView longitudeField;	
-	private TextView GPSText;
+	private TextView timeText;
 	private boolean gpsEnabled = false;
-	private TextView gpsError;
+	private TextView gpsStatus;
 	private MainLocator locator;
 	private View view;
 	private Handler timeHandler;
 	private Runnable time;
 	private boolean splashTried = false;
+	private double latitude;
+	private double longitude;
 	
 	/**
 	 * onCreateView
 	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){	
-		if (savedInstance != null) splashTried = savedInstance.getBoolean("tried");
+		if (savedInstance != null) {
+			splashTried = savedInstance.getBoolean("tried");
+			gpsEnabled = savedInstance.getBoolean("gps");
+			latitude = savedInstance.getDouble("latitude");
+			longitude = savedInstance.getDouble("longitude");
+		}
 		if (!gpsEnabled && !splashTried) startSplash();
+		
 		view = inflater.inflate(R.layout.main_layout_overview_fragment, container, false);
 		
-		gpsError = (TextView) view.findViewById(R.id.gpsErrorText);
-		gpsError.setText(getString(R.string.gpsNotOkText));
+		gpsStatus = (TextView) view.findViewById(R.id.gpsStatus);
+		gpsStatus.setText(getString(R.string.gpsNotOkText));
 		latitudeField = (TextView) view.findViewById(R.id.latitudeTextfield);
 		longitudeField = (TextView) view.findViewById(R.id.longitudeTextfield);
-		GPSText = (TextView) view.findViewById(R.id.getGPStext);
+		timeText = (TextView) view.findViewById(R.id.timeText);
+		
+		if (gpsEnabled) gpsStatus.setText(getString(R.string.gpsOkText));
+		else gpsStatus.setText(getString(R.string.gpsNotOkText));
+		
+
+		latitudeField.setText(getString(R.string.latitudeText) + latitude +".");
+		longitudeField.setText(getString(R.string.longitudeText) + longitude +".");
 		
 		timeHandler = new Handler();				
 		time = new Runnable() {			
 			public void run() {
-				GPSText.setText(Calendar.getInstance().getTime().toLocaleString());
+				timeText.setText(Calendar.getInstance().getTime().toLocaleString());
 				timeHandler.postDelayed(this,1000);				
 			}
 		};		
 		timeHandler.postDelayed(time, 1000);		
 		return view;
 	}
+	
 
 	/**
 	 * Keeps track if the splashScreen has already been invoked
@@ -65,6 +81,9 @@ public class OverviewFragment extends Fragment{
 	public void onSaveInstanceState(Bundle bundle){
 		super.onSaveInstanceState(bundle);
 		bundle.putBoolean("tried", true);
+		bundle.putBoolean("gps", gpsEnabled);
+		bundle.putDouble("latitude", latitude);
+		bundle.putDouble("longitude", longitude);
 	}
 	
 	/**
@@ -105,9 +124,11 @@ public class OverviewFragment extends Fragment{
 		if (requestCode == 1){
 			if (resultCode == SplashActivity.RETURN_GPS_OK){
 				gpsEnabled = true;
-				latitudeField.setText("Current latitude is "+data.getDoubleExtra("latitude", 0) +".");
-				longitudeField.setText("Current longitude is "+data.getDoubleExtra("longitude", 0) +".");
-				gpsError.setText(getString(R.string.gpsOkText));
+				latitude = data.getDoubleExtra("latitude", 0);
+				longitude = data.getDoubleExtra("longitude", 0);
+				latitudeField.setText(getString(R.string.latitudeText) + latitude +".");
+				longitudeField.setText(getString(R.string.longitudeText) + longitude +".");
+				gpsStatus.setText(getString(R.string.gpsOkText));
 			}
 			else{
 				gpsEnabled = false;
@@ -127,9 +148,7 @@ public class OverviewFragment extends Fragment{
 		 */
 		@Override
 		public void onReceive(Context context, Intent intent){
-			Bundle msg = intent.getExtras();
-			double latitude = 0;
-			double longitude = 0;
+			Bundle msg = intent.getExtras();			
 			if (msg!=null){
 				if (msg.getBoolean("gpsEnabled")){
 					if (msg.getBoolean("gotGPS")){
@@ -140,11 +159,11 @@ public class OverviewFragment extends Fragment{
 					gpsEnabled = true;
 					latitudeField.setText("Current latitude is "+latitude +".");
 					longitudeField.setText("Current longitude is "+longitude +".");
-					gpsError.setText("GPS signal is ok...");
+					gpsStatus.setText("GPS signal is ok...");
 				}
 				else {					
 					gpsEnabled = false;
-					gpsError.setText("GPS not enabled/no signal..?");
+					gpsStatus.setText("GPS not enabled/no signal..?");
 					latitudeField.setText("GPS tracking is currently disabled.");
 					longitudeField.setText("GPS tracking is currently disabled.");
 				}
