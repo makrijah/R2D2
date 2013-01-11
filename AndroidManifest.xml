@@ -30,26 +30,10 @@
         <activity
             android:name=".LocationListActivity"
             android:label="@string/title_activity_location_list" >
-
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
         </activity>
         <activity
             android:name=".ShowMapActivity"
             android:label="@string/title_activity_show_map" >
-
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
         </activity>
 
         <service
@@ -71,11 +55,6 @@
         <activity
             android:name=".SplashActivity"
             android:label="@string/title_activity_splash" >
-            <!-- <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter> -->
         </activity>
     </application>
 
