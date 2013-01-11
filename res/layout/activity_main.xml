@@ -14,17 +14,12 @@
         android:layout_height="wrap_content"
         android:layout_weight="1" />
 
-    <Button
-        android:id="@+id/goToLocationListButton"
+    <fragment 
+        android:id="@+id/main_buttons_fragment"
+        android:name="com.makrijah.geotrack.ButtonsFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/goToLocationListString" />
-
-    <Button
-        android:id="@+id/goToMapButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/goToMapsButtonString" />
+        android:layout_weight="1"/>
 
 
 </LinearLayout>
