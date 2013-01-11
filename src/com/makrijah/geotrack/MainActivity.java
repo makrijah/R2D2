@@ -39,7 +39,7 @@ public class MainActivity extends FragmentActivity{
 	public Object onRetainCustomNonConfigurationInstance(){
 		return settings;
 	}
-	
+
 	/**
 	 * Inflates the menu
 	 * @param menu The menu to be inflated
@@ -57,7 +57,7 @@ public class MainActivity extends FragmentActivity{
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item){
 		switch(item.getItemId()) {
-		case R.id.menu_exit: 
+		case R.id.menu_exit:
 			stopService(new Intent(getApplicationContext(), LocationService.class));
 			this.finish();
 			return true;
@@ -73,10 +73,10 @@ public class MainActivity extends FragmentActivity{
 	 */
 	private void showAboutDialog(){
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.about_dialog_title);		
+		builder.setTitle(R.string.about_dialog_title);	
 		builder.setMessage(R.string.about_dialog_text)
 		.setCancelable(true)
-		.setNeutralButton("Ok", new DialogInterface.OnClickListener() {			
+		.setNeutralButton("Ok", new DialogInterface.OnClickListener() {	
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
 			}

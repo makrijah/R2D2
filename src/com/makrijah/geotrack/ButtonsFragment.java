@@ -15,18 +15,18 @@ import android.widget.Button;
  * @version Nov 29, 2012
  */
 public class ButtonsFragment extends Fragment{
-	
+
 	private Button goToLocationListButton;
 	private Button mapButton;
 	private View view;
 	private Activity activity;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
 		view = inflater.inflate(R.layout.main_buttons_fragment, container, false);
 		activity = getActivity();
 		addButtons();
-				
+
 		return view;
 	}
 
@@ -46,7 +46,7 @@ public class ButtonsFragment extends Fragment{
 		mapButton = (Button) view.findViewById(R.id.goToMapButton);
 		mapButton.setOnClickListener(new View.OnClickListener() {
 
-			
+
 			public void onClick(View v) {
 				MapIntent maps = new MapIntent(activity.getApplicationContext(), ShowMapActivity.class);
 				maps.setLocation(false, 0, 0, "");
